@@ -1,0 +1,46 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.1.1'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.carmel.surfScan'
+version = '0.0.1'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url = uri("https://maven.pkg.github.com/vshneer/surf-scan-dataModels")
+		credentials {
+			username = project.findProperty("gpr.user") ?: System.getenv("GH_USER")
+			password = project.findProperty("gpr.key") ?: System.getenv("GH_TOKEN")
+		}
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	implementation 'com.carmel.surfScan:datamodels:2.0'
+	implementation 'com.fasterxml.jackson.core:jackson-core'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'com.carmel.surfScan:datamodels:2.0'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testImplementation 'org.springframework.kafka:spring-kafka'
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
